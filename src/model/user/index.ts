@@ -15,7 +15,7 @@ class User {
     }
     async create(){
         const trx = await knex.transaction()
-        const insertedId = await trx('points').insert(this)
+        const insertedId = await trx('users').insert(this)
         const userId = insertedId[0]            
         trx.commit()
         return {

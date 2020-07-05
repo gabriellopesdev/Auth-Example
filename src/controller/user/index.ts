@@ -14,6 +14,13 @@ class UserController {
         const listedUsers = await user.index()
         return response.json(listedUsers);          
     }
+
+    async deleteUser(request: Request, response: Response){
+        const user = new User()
+        const { id } = request.params;
+        await user.delete(Number(id))
+        return response.json('User deleted'); 
+    }
 }
 
 export default UserController
