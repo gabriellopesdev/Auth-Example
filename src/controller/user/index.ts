@@ -1,4 +1,4 @@
-import { User, iUser } from '../../model/user'
+import { User } from '../../model/user'
 import { Request, Response } from 'express'
 
 class UserController {
@@ -26,11 +26,11 @@ class UserController {
         const { login, pass } = request.body
         const user = new User()
         if (await user.searchByLogin(login)){
-            if (user.pass !== pass) {
-                return response.json('Password invalid') 
+            if (await user.validatePassword(pass)) {
+                return response.json('Login succeed') 
             }
             else {
-                return response.json('Login suceed') 
+                return response.json('Password invalid') 
             }
         }
         else {
