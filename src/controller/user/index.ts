@@ -1,4 +1,4 @@
-import User from '../../model/user'
+import { User, iUser } from '../../model/user'
 import { Request, Response } from 'express'
 
 class UserController {
@@ -20,6 +20,22 @@ class UserController {
         const { id } = request.params;
         await user.delete(Number(id))
         return response.json('User deleted'); 
+    }
+
+    async userLogin(request: Request, response: Response){
+        const { login, pass } = request.body
+        const user = new User()
+        if (await user.searchByLogin(login)){
+            if (user.pass !== pass) {
+                return response.json('Password invalid') 
+            }
+            else {
+                return response.json('Login suceed') 
+            }
+        }
+        else {
+            return response.json('User invalid')
+        }
     }
 }
 
