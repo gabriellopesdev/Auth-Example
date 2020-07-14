@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 
 class User {
 
+    id: number
     name: string
     login: string
     pass: string
@@ -11,6 +12,7 @@ class User {
         this.name = name || '' 
         this.login = login || ''
         this.pass = pass || ''
+        this.id = 0
     }
     async delete(id: Number) {
         if (id === 1) {
@@ -50,7 +52,7 @@ class User {
 
     async searchByLogin(login: string){
         const users = await knex('users')   
-        .select('users.name', 'users.login', 'users.pass')
+        .select('users.id', 'users.name', 'users.login', 'users.pass')
         .where('users.login', login)
         .whereNot('users.login', 'admin')
         if (!users.length) {
@@ -60,6 +62,7 @@ class User {
             this.login = users[0].login
             this.name = users[0].name
             this.pass = users[0].pass
+            this.id = users[0].id
             return true 
         }
         

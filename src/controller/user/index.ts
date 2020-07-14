@@ -1,5 +1,6 @@
 import { User } from '../../model/user'
 import { Request, Response } from 'express'
+import Auth from '../../middleware/jwt'
 
 class UserController {
     async createUser(request: Request, response: Response) {
@@ -25,16 +26,17 @@ class UserController {
     async userLogin(request: Request, response: Response){
         const { login, pass } = request.body
         const user = new User()
+        const auth = new Auth()
         if (await user.searchByLogin(login)){
             if (await user.validatePassword(pass)) {
-                return response.json('Login succeed') 
+                return response.json({ auth: true, token: auth.GetToken(user.id)}) 
             }
             else {
-                return response.json('Password invalid') 
+                return response.json({auth: false, error: 'Password invalid'}) 
             }
         }
         else {
-            return response.json('User invalid')
+            return response.json({ auth: false, error: 'User invalid' })
         }
     }
 }
